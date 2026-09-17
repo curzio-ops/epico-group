@@ -12,6 +12,6 @@ RUN rsvg-convert -w 32  -h 32  favicon.svg -o favicon-32.png \
 # Stage 2: static server
 FROM caddy:2-alpine
 COPY Caddyfile /etc/caddy/Caddyfile
-COPY index.html favicon.svg robots.txt sitemap.xml llms.txt site.webmanifest /srv/
+COPY index.html favicon.svg robots.txt sitemap.xml llms.txt site.webmanifest google15f6a6f2c57dfbc7.html /srv/
 COPY --from=gen /gen/*.png /srv/
 EXPOSE 80
