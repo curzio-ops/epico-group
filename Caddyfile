@@ -1,0 +1,10 @@
+:80 {
+	root * /srv
+	file_server
+	encode gzip zstd
+	header {
+		Cache-Control "public, max-age=3600"
+		X-Content-Type-Options nosniff
+		Referrer-Policy strict-origin-when-cross-origin
+	}
+}
