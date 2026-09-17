@@ -1,6 +1,6 @@
 # Stage 1: rasterize favicon / icons / OG image from the SVG sources
 FROM alpine:3.20 AS gen
-RUN apk add --no-cache librsvg ttf-dejavu
+RUN apk add --no-cache rsvg-convert ttf-dejavu
 WORKDIR /gen
 COPY favicon.svg og.svg ./
 RUN rsvg-convert -w 32  -h 32  favicon.svg -o favicon-32.png \
