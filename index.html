@@ -106,6 +106,7 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://res.cloudinary.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;500&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400&display=swap">
 <style>
 :root{
@@ -165,22 +166,37 @@ header{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:co
 
 /* triptych */
 .tri{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px;background:var(--rule);border-block:1px solid var(--rule)}
-.tri a{display:grid;grid-template-rows:auto 1fr auto;gap:36px;min-height:520px;padding:clamp(28px,3.4vw,52px);background:var(--surface);position:relative;transition:transform .5s cubic-bezier(.2,.7,.2,1),background .5s}
-.tri a:hover,.tri a:focus-visible{background:color-mix(in srgb,var(--surface) 70%,var(--bg))}
-.tri .mark{height:64px;display:flex;align-items:center}
+.tri a{display:grid;grid-template-rows:auto 1fr auto;gap:36px;min-height:min(620px,78vh);padding:clamp(28px,3.4vw,52px);background:#0E1230;color:#fff;position:relative;overflow:hidden;isolation:isolate}
+.tri .ph{position:absolute;inset:0;margin:0;z-index:-2;overflow:hidden;background:#0E1230}
+.tri .ph img{width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.04);transition:transform 1.1s cubic-bezier(.2,.7,.2,1),filter 1.1s;filter:saturate(.92) brightness(.92);will-change:transform}
+.tri a::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(14,18,48,.18) 0%,rgba(14,18,48,.05) 34%,rgba(14,18,48,.66) 62%,rgba(14,18,48,.94) 100%);transition:opacity .6s}
+.tri a:hover .ph img,.tri a:focus-visible .ph img{transform:scale(1.1);filter:saturate(1.05) brightness(1)}
+.tri .mark{height:56px;width:max-content;max-width:100%;display:flex;align-items:center;padding:10px 14px;background:#fff;border-radius:6px;box-shadow:0 8px 30px rgba(0,0,0,.28);transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.tri a:hover .mark{transform:translateY(-4px)}
 .tri .mark svg{height:100%;width:auto;max-width:100%}
-.tri h2{font-size:clamp(28px,2.6vw,40px);font-weight:300}
-.tri ul{list-style:none;margin:18px 0 0;padding:0;color:var(--fg-2);font-size:15.5px;display:grid;gap:6px}
-.tri ul li::before{content:"—";margin-right:10px;color:var(--rule)}
-.tri .go{display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid var(--rule);padding-top:18px;font-family:var(--mono);font-size:12.5px;letter-spacing:.14em;text-transform:uppercase}
-.tri .go b{font-weight:400;color:var(--fg-2)}
+.tri .mark .c-navy{fill:#252C60}.tri .mark .c-grey{fill:#5B5B5E}.tri .mark .c-lgrey{fill:#B9B9BE}.tri .mark .c-purple{fill:#302682}
+.tri>a>div:not(.mark):not(.go){align-self:end}
+.tri h2{font-size:clamp(28px,2.6vw,40px);font-weight:300;color:#fff;text-shadow:0 2px 24px rgba(0,0,0,.35);transform:translateY(0);transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.tri h2::before{content:"";display:block;width:44px;height:3px;margin-bottom:16px;background:var(--red);transition:width .6s cubic-bezier(.2,.7,.2,1)}
+.tri a:hover h2::before{width:88px}
+.tri ul{list-style:none;margin:18px 0 0;padding:0;color:rgba(255,255,255,.82);font-size:15.5px;display:grid;gap:6px}
+.tri ul li::before{content:"—";margin-right:10px;color:var(--red)}
+.tri .go{display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid rgba(255,255,255,.28);padding-top:18px;font-family:var(--mono);font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:#fff}
+.tri .go b{font-weight:400;color:rgba(255,255,255,.75)}
 .tri .go i{font-style:normal;transition:transform .4s;display:inline-block}
 .tri a:hover .go i{transform:translateX(8px)}
 .tri a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--stitch);transform:scaleX(0);transform-origin:left;transition:transform .7s cubic-bezier(.2,.7,.2,1)}
 .tri a:hover::after,.tri a:focus-visible::after{transform:scaleX(1)}
-.tri a[data-k="selleria"] h2{color:var(--brand)}
-.tri a[data-k="yachts"] h2{color:var(--yachts)}
-.tri a[data-k="care"] h2{color:var(--care)}
+@media (hover:hover) and (min-width:961px){
+  .tri ul{max-height:0;opacity:0;overflow:hidden;transform:translateY(12px);transition:max-height .7s cubic-bezier(.2,.7,.2,1),opacity .5s .1s,transform .7s cubic-bezier(.2,.7,.2,1)}
+  .tri a:hover ul,.tri a:focus-visible ul{max-height:200px;opacity:1;transform:none}
+}
+@supports (animation-timeline:view()){
+  @media (max-width:960px){
+    .tri .ph img{transform:scale(1.18);animation:tri-par linear both;animation-timeline:view();animation-range:entry 0% exit 100%}
+    @keyframes tri-par{from{translate:0 -6%}to{translate:0 6%}}
+  }
+}
 
 /* seam divider */
 .seam{height:3px;background:var(--stitch);opacity:.9;margin-block:0}
@@ -226,7 +242,7 @@ footer ul.soc b{font-weight:500;margin-right:6px}
 
 @media (max-width:960px){
   .tri{grid-template-columns:1fr}
-  .tri a{min-height:0}
+  .tri a{min-height:540px}
   .group .wrap{grid-template-columns:1fr}
   .values,.steps{grid-template-columns:1fr}
   footer .wrap{grid-template-columns:1fr}
@@ -467,6 +483,7 @@ l0 369 -371 0 c-236 0 -377 4 -390 10 -18 10 -19 25 -19 360 0 335 1 350 19
 
 <nav class="tri" aria-label="Le divisioni del gruppo">
   <a href="https://www.epico.ch" data-k="selleria">
+    <figure class="ph"><img src="https://res.cloudinary.com/dpzx8y2ta/image/upload/f_auto,q_auto,w_1200/epico/group/selleria" srcset="https://res.cloudinary.com/dpzx8y2ta/image/upload/f_auto,q_auto,w_800/epico/group/selleria 800w, https://res.cloudinary.com/dpzx8y2ta/image/upload/f_auto,q_auto,w_1200/epico/group/selleria 1200w, https://res.cloudinary.com/dpzx8y2ta/image/upload/f_auto,q_auto,w_1600/epico/group/selleria 1600w" sizes="(max-width:960px) 100vw, 34vw" width="1200" height="900" loading="lazy" decoding="async" alt="Macchina da cucire industriale nel laboratorio epico.ch"></figure>
     <div class="mark"><svg class="" aria-label="epico.ch" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 5088 1640" role="img"><rect class="c-white" x="86" y="84" width="4917" height="1463" rx="87"/><path class="c-purple" transform="translate(0.000000,1640.000000) scale(0.100000,-0.100000)" d="M901 15543 c-12 -10 -26 -36 -31 -58 -13 -54 -13 -14436 0 -14490 5
 -22 19 -48 31 -58 20 -16 1204 -17 24541 -17 21202 0 24523 2 24547 14 15 8
 32 26 39 41 17 38 17 14492 0 14530 -7 15 -24 33 -39 41 -24 12 -3345 14
@@ -658,6 +675,7 @@ c-238 -44 -317 -62 -360 -83 -27 -13 -74 -33 -104 -44 -29 -11 -70 -31 -90
     <div class="go"><b>epico.ch</b><span><span data-i18n="go">Vai al sito</span> <i>→</i></span></div>
   </a>
   <a href="https://epicoyachts.swiss" data-k="yachts">
+    <figure class="ph"><img src="https://res.cloudinary.com/dpzx8y2ta/image/upload/f_auto,q_auto,w_1200/epico/group/yachts" srcset="https://res.cloudinary.com/dpzx8y2ta/image/upload/f_auto,q_auto,w_800/epico/group/yachts 800w, https://res.cloudinary.com/dpzx8y2ta/image/upload/f_auto,q_auto,w_1200/epico/group/yachts 1200w, https://res.cloudinary.com/dpzx8y2ta/image/upload/f_auto,q_auto,w_1600/epico/group/yachts 1600w" sizes="(max-width:960px) 100vw, 34vw" width="1200" height="1600" loading="lazy" decoding="async" alt="Pardo Yachts in navigazione su un lago svizzero"></figure>
     <div class="mark"><svg class="" aria-label="Epico Yachts Swiss" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3170 1787" role="img"><path class="c-grey" transform="translate(0.000000,1787.000000) scale(0.100000,-0.100000)" d="M16752 17390 c-232 -61 -431 -250 -498 -475 -24 -78 -24 -245 -1
 -335 51 -195 188 -365 367 -454 278 -137 614 -93 810 104 328 331 232 906
 -185 1111 -149 73 -332 91 -493 49z M3660 15454 c-787 -71 -1419 -356 -1939
@@ -749,6 +767,7 @@ l97 3 422 795 421 795 1215 0 1215 0 429 -797 429 -798 108 0 107 0 -1130
     <div class="go"><b>epicoyachts.swiss</b><span><span data-i18n="go">Vai al sito</span> <i>→</i></span></div>
   </a>
   <a href="https://epico.care" data-k="care">
+    <figure class="ph"><img src="https://res.cloudinary.com/dpzx8y2ta/image/upload/f_auto,q_auto,w_1200/epico/group/care" srcset="https://res.cloudinary.com/dpzx8y2ta/image/upload/f_auto,q_auto,w_800/epico/group/care 800w, https://res.cloudinary.com/dpzx8y2ta/image/upload/f_auto,q_auto,w_1200/epico/group/care 1200w, https://res.cloudinary.com/dpzx8y2ta/image/upload/f_auto,q_auto,w_1600/epico/group/care 1600w" sizes="(max-width:960px) 100vw, 34vw" width="1200" height="676" loading="lazy" decoding="async" alt="Barche coperte ormeggiate in porto, protette da epico.care"></figure>
     <div class="mark"><svg class="" aria-label="epico.ch CARE" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2000 582" role="img"><path class="c-navy" transform="translate(0.000000,582.000000) scale(0.100000,-0.100000)" d="M2543 5634 c-1018 -125 -1857 -772 -2221 -1714 -219 -566 -243 -1250
 -67 -1836 416 -1379 1806 -2175 3253 -1863 1306 282 2198 1476 2121 2839 -74
 1325 -1006 2356 -2314 2562 -169 26 -602 34 -772 12z m512 -294 c517 -43 934
